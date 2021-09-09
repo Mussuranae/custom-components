@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,10 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit{
   title = 'custom-components';
   showBanner = true;
+
+  constructor(private translate: TranslateService) {
+    translate.setDefaultLang('en');
+  }
 
   ngOnInit() {
     // Detect if the user uses IE as browser
@@ -20,5 +25,9 @@ export class AppComponent implements OnInit{
 
   isHidden(event: boolean) {
     this.showBanner = event;
+  }
+
+  useLanguage(language: string) {
+    this.translate.use(language);
   }
 }

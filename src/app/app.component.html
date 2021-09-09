@@ -2,6 +2,11 @@
 
 <router-outlet></router-outlet>
 
+<p translate>loremText</p>
+
+<button mat-button (click)="useLanguage('en')">English</button>
+<button mat-button (click)="useLanguage('fr')">French</button>
+
 <ng-container *ngIf="showBanner">
   <informative-banner text="coucou toi" (showBanner)="isHidden($event)"></informative-banner>
 </ng-container>
