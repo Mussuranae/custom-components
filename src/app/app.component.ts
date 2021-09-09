@@ -12,7 +12,7 @@ export class AppComponent implements OnInit{
   ngOnInit() {
     // Detect if the user uses IE as browser
     if (navigator.userAgent.indexOf("MSIE") != -1 || navigator.userAgent.indexOf("rv:") > -1
-    /*|| document['documentMode']*/) {
+    /*|| document['documentMode'] <= this isn't recongnized by typescript*/) {
       this.showBanner = true;
     }
     else this.showBanner = false;
