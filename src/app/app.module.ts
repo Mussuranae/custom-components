@@ -14,11 +14,15 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 // Components
 import { AppComponent } from './app.component';
 import { InformativeBannerComponent } from './informative-banner/informative-banner.component';
+import { GanttChartComponent } from './gantt-chart/gantt-chart.component';
+import { TranslationComponent } from './translation/translation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    InformativeBannerComponent
+    InformativeBannerComponent,
+    GanttChartComponent,
+    TranslationComponent
   ],
   imports: [
     BrowserModule,
