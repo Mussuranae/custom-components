@@ -2,6 +2,21 @@
 
 <router-outlet></router-outlet>
 
+<h4>Translation with Pipe</h4>
+<!-- translation: translation pipe -->
+<p>{{ 'loremText' | translate }}</p>
+
+<h4>Translation with Directive (dynamic attribute)</h4>
+<!-- translation: directive (key as attribute)-->
+<p [translate]="'loremText'"></p>
+
+<h4>Translation with Directive (attribute only)</h4>
+<!-- translation: directive (key as content of element) -->
+<p translate>loremText</p>
+
+<button mat-button (click)="useLanguage('en')">English</button>
+<button mat-button (click)="useLanguage('fr')">French</button>
+
 <ng-container *ngIf="showBanner">
   <informative-banner text="coucou toi" (showBanner)="isHidden($event)"></informative-banner>
 </ng-container>
