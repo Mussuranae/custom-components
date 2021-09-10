@@ -11,6 +11,9 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+// Highcharts and HightChat-Angular
+import { HighchartsChartModule } from 'highcharts-angular';
+
 // Components
 import { AppComponent } from './app.component';
 import { InformativeBannerComponent } from './informative-banner/informative-banner.component';
@@ -30,6 +33,7 @@ import { TranslationComponent } from './translation/translation.component';
     BrowserAnimationsModule,
     MaterialModule,
     FlexLayoutModule,
+    HighchartsChartModule,
 
     // ngx-translate and the loader module
     HttpClientModule,
