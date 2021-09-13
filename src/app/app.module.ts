@@ -11,14 +11,27 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+// Highcharts and HightChat-Angular
+import { HighchartsChartModule } from 'highcharts-angular';
+
+// DX Gantt Chart
+import { DxButtonModule } from 'devextreme-angular';
+import { DxGanttModule } from 'devextreme-angular';
+
 // Components
 import { AppComponent } from './app.component';
 import { InformativeBannerComponent } from './informative-banner/informative-banner.component';
+import { GanttChartComponent } from './gantt-chart/gantt-chart.component';
+import { TranslationComponent } from './translation/translation.component';
+import { GanttDxComponent } from './gantt-dx/gantt-dx.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    InformativeBannerComponent
+    InformativeBannerComponent,
+    GanttChartComponent,
+    TranslationComponent,
+    GanttDxComponent
   ],
   imports: [
     BrowserModule,
@@ -26,6 +39,7 @@ import { InformativeBannerComponent } from './informative-banner/informative-ban
     BrowserAnimationsModule,
     MaterialModule,
     FlexLayoutModule,
+    HighchartsChartModule,
 
     // ngx-translate and the loader module
     HttpClientModule,
@@ -35,7 +49,11 @@ import { InformativeBannerComponent } from './informative-banner/informative-ban
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+
+    // DX import
+    DxButtonModule,
+    DxGanttModule
 
   ],
   providers: [],
