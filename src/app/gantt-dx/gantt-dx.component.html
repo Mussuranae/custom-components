@@ -1,0 +1,13 @@
+  <dx-gantt [taskListWidth]="400" scaleType="hours" height="300">
+    <!-- Data Binding -->
+    <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+    <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+
+    <!-- Column on the left side -->
+    <dxi-column dataField="title" caption="Subject" [width]="200"></dxi-column>
+    <dxi-column dataField="start" caption="Start Date" dataType="date"></dxi-column>
+    <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
+
+    <dxo-validation [autoUpdateParentTasks]="true"></dxo-validation>
+    <dxo-editing [enabled]="true" [allowTaskUpdating]="true" ></dxo-editing>
+  </dx-gantt>

@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
-// Gantt Chart Import
-// import * as Highcharts from 'highcharts';
-// import HC_gantt from 'highcharts/modules/gantt';
-// HC_gantt(Highcharts);
-import * as Highcharts from "highcharts/highcharts-gantt";
+import * as Highcharts from 'highcharts/highcharts-gantt';
 import DraggablePoints from 'highcharts/modules/draggable-points';
 DraggablePoints(Highcharts);
+
+/**
+ * Testing Highchart library for Gantt Chart
+ * https://www.highcharts.com/products/gantt/
+ *
+ * + Responsive
+ */
 
 @Component({
   selector: 'app-gantt-chart',
@@ -44,7 +47,7 @@ export class GanttChartComponent {
       * To be able to drag and drop vertically, the type must be different from 'Treegrid',
       * which is the default one for Gantt charts. This is not required if we don't change the type.
       */
-      type: 'category',
+      type: 'treegrid',
       categories: ['Prototype', 'Test Prototype', 'Develop', 'Run acceptance tests'],
       min: 0,
   },
@@ -52,6 +55,7 @@ export class GanttChartComponent {
       {
         type: "gantt",
         name: "Project 1",
+        grouping: true,
         data: [
           // First section
           {
@@ -59,10 +63,6 @@ export class GanttChartComponent {
             id: 'prototype',
             start: Date.UTC(2014, 10, 1),
             end: Date.UTC(2014, 10, 25),
-            dragDrop: {
-              draggableX: true
-            },
-            y: 0
           },
           {
             name: 'Alpha',
@@ -70,10 +70,6 @@ export class GanttChartComponent {
             start: Date.UTC(2014, 10, 2),
             end: Date.UTC(2014, 10, 10),
             parent: 'prototype',
-            dragDrop: {
-              draggableY: true
-            },
-            y: 0
           },
           {
             name: 'Beta',
@@ -82,7 +78,6 @@ export class GanttChartComponent {
             end: Date.UTC(2014, 10, 17),
             parent: 'prototype',
             dependency: 'alpha',
-            y: 0
           },
           {
             name: 'Omega',
@@ -91,29 +86,25 @@ export class GanttChartComponent {
             end: Date.UTC(2014, 10, 25),
             parent: 'prototype',
             dependency: 'beta',
-             y: 0
           },
           // Second section
           {
             name: "Test prototype",
             start: Date.UTC(2014, 10, 27),
             end: Date.UTC(2014, 10, 31),
-            y: 1
           },
           // Third section
           {
             name: "Develop",
             id: 'develop',
             start: Date.UTC(2014, 10, 28),
-            end: Date.UTC(2014, 11, 20),
-            y: 2
+            end: Date.UTC(2014, 11, 20)
           },
           // Last section
           {
             name: "Run acceptance tests",
             start: Date.UTC(2014, 11, 20),
-            end: Date.UTC(2014, 11, 29),
-            y: 3
+            end: Date.UTC(2014, 11, 29)
           }
         ]
       }
