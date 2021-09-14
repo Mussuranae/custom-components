@@ -15,5 +15,6 @@ export class GanttDxComponent {
 
   tasks: Task[] = tasks;
   dependencies: Dependency[] = dependencies;
+  currentTime: Date = new Date();
 
 }
