@@ -15,5 +15,7 @@
 </main>
 
 <ng-container *ngIf="showBanner">
-  <informative-banner text="If you are using Internet Explorer, you should change for Chrome or Firefox. IE is Evil after all..." (showBanner)="isHidden($event)"></informative-banner>
+  <informative-banner text="If you are using Internet Explorer or a version of Edge lower than v79,
+  you should change for Firefox, Chrome or update Edge. IE is Evil after all..."
+  showBanner)="isHidden($event)"></informative-banner>
 </ng-container>
