@@ -24,11 +24,11 @@ import { NgD3GanttModule } from 'ng-d3-gantt';
 
 // Components
 import { AppComponent } from './app.component';
-import { InformativeBannerComponent } from './informative-banner/informative-banner.component';
-import { GanttChartComponent } from './gantt-chart/gantt-chart.component';
-import { TranslationComponent } from './translation/translation.component';
-import { GanttDxComponent } from './gantt-dx/gantt-dx.component';
-import { D3GanttComponent } from './d3-gantt/d3-gantt.component';
+import { InformativeBannerComponent } from './components/informative-banner/informative-banner.component';
+import { GanttChartComponent } from './components/gantt-chart/gantt-chart.component';
+import { TranslationComponent } from './components/translation/translation.component';
+import { GanttDxComponent } from './components/gantt-dx/gantt-dx.component';
+import { D3GanttComponent } from './components/d3-gantt/d3-gantt.component';
 
 @NgModule({
   declarations: [

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { D3GanttComponent } from './d3-gantt/d3-gantt.component';
-import { GanttChartComponent } from './gantt-chart/gantt-chart.component';
-import { GanttDxComponent } from './gantt-dx/gantt-dx.component';
-import { TranslationComponent } from './translation/translation.component';
+import { D3GanttComponent } from './components/d3-gantt/d3-gantt.component';
+import { GanttChartComponent } from './components/gantt-chart/gantt-chart.component';
+import { GanttDxComponent } from './components/gantt-dx/gantt-dx.component';
+import { TranslationComponent } from './components/translation/translation.component';
 
 const routes: Routes = [
   { path: 'translate', component: TranslationComponent },

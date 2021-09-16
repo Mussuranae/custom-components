@@ -1,0 +1,102 @@
+{
+  "series": [
+    {
+      "name": "Project 1",
+      "data": [
+        {
+          "name": "Start prototype",
+          "id": "prototype",
+          "start": 1634688000000,
+          "end": 1635120000000,
+          "completed": {
+            "amount": 0.2
+          }
+        },
+        {
+          "name": "Alpha",
+          "id": "alpha",
+          "start": 1633132800000,
+          "end": 1633824000000,
+          "parent": "prototype",
+          "completed": {
+            "amount": 0.7
+          }
+        },
+        {
+          "name": "Beta",
+          "id": "beta",
+          "start": 1633910400000,
+          "end": 1634428800000,
+          "parent": "prototype",
+          "dependency": "alpha"
+        },
+        {
+          "name": "Omega",
+          "id": "omega",
+          "start": 1634688000000,
+          "end": 1635120000000,
+          "parent": "prototype",
+          "dependency": "beta"
+        },
+        {
+          "name": "Test prototype",
+          "start": 1635292800000,
+          "end": 1635638400000,
+          "id": "testingProto"
+        },
+        {
+          "name": "Develop",
+          "id": "develop",
+          "start": 1635379200000,
+          "end": 1637366400000
+        },
+        {
+          "name": "Run acceptance tests",
+          "id": "testAcceptance",
+          "start": 1637366400000,
+          "end": 1638144000000
+        }
+      ]
+    },
+    {
+      "name": "Project 2",
+      "data": [
+        {
+          "name": "Start Development",
+          "id": "dev",
+          "start": 1633046400000,
+          "end": 1635120000000,
+          "completed": {
+            "amount": 0.2
+          }
+        },
+        {
+          "name": "Phase 1",
+          "id": "ph1",
+          "start": 1633132800000,
+          "end": 1633824000000,
+          "parent": "dev",
+          "completed": {
+            "amount": 0.7
+          }
+        },
+        {
+          "name": "Phase 2",
+          "id": "ph2",
+          "start": 1633910400000,
+          "end": 1634428800000,
+          "parent": "dev",
+          "dependency": "ph1"
+        },
+        {
+          "name": "Test",
+          "id": "test",
+          "start": 1634688000000,
+          "end": 1635120000000,
+          "parent": "dev",
+          "dependency": "ph2"
+        }
+      ]
+    }
+  ]
+}
