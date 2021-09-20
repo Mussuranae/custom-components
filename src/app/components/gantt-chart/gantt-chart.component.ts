@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts/highcharts-gantt';
 import DraggablePoints from 'highcharts/modules/draggable-points';
 DraggablePoints(Highcharts);
@@ -18,13 +18,15 @@ import { FormControl, FormGroup } from '@angular/forms';
   templateUrl: './gantt-chart.component.html',
   styleUrls: ['./gantt-chart.component.scss']
 })
-export class GanttChartComponent implements OnInit {
+export class GanttChartComponent implements OnInit, AfterViewInit {
 
   private jsonData = series;
   rangeUnits = rangeUnits;
   Highcharts: typeof Highcharts = Highcharts;
   updateChartFlag = false;
   DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
+  initialMin = 0;
+  initialMax = 0;
 
   chartOptions: Highcharts.Options = {
     chart: chartConfig,
@@ -48,12 +50,17 @@ export class GanttChartComponent implements OnInit {
   rangeUnitForm = new FormControl('month');
 
   ngOnInit() {
+
     // Set the language for label, button text, etc...
     this.Highcharts.setOptions(fr_config);
     this.updateGanttHeight();
 
     this.updateDateRange();
-    this.updateRangeUnit()
+  }
+
+  ngAfterViewInit() {
+    this.initialMin = this.Highcharts.charts[0]?.xAxis[0].min!;
+    this.initialMax = this.Highcharts.charts[0]?.xAxis[0].max!;
   }
 
   /** Allow us to change the height of rows in chart */
@@ -106,66 +113,96 @@ export class GanttChartComponent implements OnInit {
     })
   }
 
-  previous() {
+  zoom(param: 'in' | 'out') {
     const unit = this.rangeUnitForm.value;
     const min = this.Highcharts.charts[0]?.xAxis[0].min!;
     const max = this.Highcharts.charts[0]?.xAxis[0].max!;
 
-    switch(unit) {
-      case "hours":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS/2), max-(this.DAY_IN_MILLISECONDS/2));
-        break;
-      case "day":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS), max-(this.DAY_IN_MILLISECONDS));
-        break;
-      case "week":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*7), max-(this.DAY_IN_MILLISECONDS*7));
-        break;
-      case "month":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*30), max-(this.DAY_IN_MILLISECONDS*30));
-        break;
-      case "year":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*365), max-(this.DAY_IN_MILLISECONDS*365));
-        break;
+    if (param === 'in') {
+      switch(unit) {
+        case "hours":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS/2), max-(this.DAY_IN_MILLISECONDS/2));
+          break;
+        case "day":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS), max-(this.DAY_IN_MILLISECONDS));
+          break;
+        case "week":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*7), max-(this.DAY_IN_MILLISECONDS*7));
+          break;
+        case "month":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*30), max-(this.DAY_IN_MILLISECONDS*30));
+          break;
+        case "year":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*365), max-(this.DAY_IN_MILLISECONDS*365));
+          break;
+      }
+    } else if (param === 'out') {
+      switch(unit) {
+        case "hours":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS/2), max+(this.DAY_IN_MILLISECONDS/2));
+          break;
+        case "day":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS), max+(this.DAY_IN_MILLISECONDS));
+          break;
+        case "week":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*7), max+(this.DAY_IN_MILLISECONDS*7));
+          break;
+        case "month":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*30), max+(this.DAY_IN_MILLISECONDS*30));
+          break;
+        case "year":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*365), max+(this.DAY_IN_MILLISECONDS*365));
+          break;
+      }
     }
-
-    this.updateChartFlag = true;
   }
 
-  next() {
+  move(param: 'previous' | 'next') {
     const unit = this.rangeUnitForm.value;
     const min = this.Highcharts.charts[0]?.xAxis[0].min!;
     const max = this.Highcharts.charts[0]?.xAxis[0].max!;
 
-    switch(unit) {
-      case "hours":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS/2), max+(this.DAY_IN_MILLISECONDS/2));
-        break;
-      case "day":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS), max+(this.DAY_IN_MILLISECONDS));
-        break;
-      case "week":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*7), max+(this.DAY_IN_MILLISECONDS*7));
-        break;
-      case "month":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*30), max+(this.DAY_IN_MILLISECONDS*30));
-        break;
-      case "year":
-        this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*365), max+(this.DAY_IN_MILLISECONDS*365));
-        break;
+    if(param === 'previous') {
+      switch(unit) {
+        case "hours":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS/2), max-(this.DAY_IN_MILLISECONDS/2));
+          break;
+        case "day":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS), max-(this.DAY_IN_MILLISECONDS));
+          break;
+        case "week":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*7), max-(this.DAY_IN_MILLISECONDS*7));
+          break;
+        case "month":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*30), max-(this.DAY_IN_MILLISECONDS*30));
+          break;
+        case "year":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*365), max-(this.DAY_IN_MILLISECONDS*365));
+          break;
+      }
+    } else if (param === 'next') {
+      switch(unit) {
+        case "hours":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS/2), max+(this.DAY_IN_MILLISECONDS/2));
+          break;
+        case "day":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS), max+(this.DAY_IN_MILLISECONDS));
+          break;
+        case "week":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*7), max+(this.DAY_IN_MILLISECONDS*7));
+          break;
+        case "month":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*30), max+(this.DAY_IN_MILLISECONDS*30));
+          break;
+        case "year":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*365), max+(this.DAY_IN_MILLISECONDS*365));
+          break;
+      }
     }
-
-    this.updateChartFlag = true;
   }
 
-  updateRangeUnit() {
-    this.rangeUnitForm.valueChanges.subscribe(values => {
-      const min = this.Highcharts.charts[0]?.xAxis[0].min;
-      const max = this.Highcharts.charts[0]?.xAxis[0].max;
-      // console.log('value', values)
-      // console.log('min', min)
-      // console.log(this.Highcharts.charts[0]?.xAxis[0].setExtremes())
-    })
+  resetView() {
+    this.Highcharts.charts[0]?.xAxis[0].setExtremes(this.initialMin, this.initialMax)
   }
 
   // formatDataLabel(name: string, customColor: string) {

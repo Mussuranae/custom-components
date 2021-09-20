@@ -1,4 +1,5 @@
 <section fxFlex fxLayout fxLayoutGap="16px">
+  <!-- next icon undo and redo -->
   <article fxLayoutAlign="start center" fxLayoutGap="16px" [formGroup]="rangeForm">
     <mat-form-field appearance="outline" color="primary">
       <input matInput [matDatepicker]="from" placeholder="Choose a date" formControlName="from">
@@ -13,14 +14,43 @@
   </article>
 
   <article fxLaoutAlign="start center" fxLayoutGap="16px">
-    <button mat-button (click)="previous()">Previous</button>
-    <button mat-button (click)="next()">Next</button>
+    <button mat-button (click)="move('previous')">
+      <span fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon aria-label="arrow_back">arrow_back</mat-icon>
+        Previous
+      </span>
+    </button>
+    <button mat-button (click)="move('next')">
+      <span fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon aria-label="arrow_forward">arrow_forward</mat-icon>
+        Next
+      </span>
+    </button>
+    <button mat-button (click)="zoom('in')">
+      <span fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon aria-label="zoom_in">zoom_in</mat-icon>
+        Zoom In
+      </span>
+    </button>
+    <button mat-button (click)="zoom('out')">
+      <span fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon aria-label="zoom_out">zoom_out</mat-icon>
+        Zoom Out
+      </span>
+    </button>
+    <button mat-button (click)="resetView()">
+      <span fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon aria-label="restart_alt">restart_alt</mat-icon>
+        Reset
+      </span>
+    </button>
     <mat-form-field appearance="outline">
       <mat-select [formControl]="rangeUnitForm">
         <mat-option *ngFor="let unit of rangeUnits" [value]="unit.value">{{unit.label}}</mat-option>
       </mat-select>
     </mat-form-field>
   </article>
+
 </section>
 
 <!--
