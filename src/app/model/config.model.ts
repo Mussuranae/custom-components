@@ -28,3 +28,147 @@ export const fr_custom_config = {
 export const en_custom_config = {
   weekFormat: { list: ['Week %W', 'W%W'] }
 }
+
+export const chartConfig = {
+  //! Allow scrollable chart, title and legend stay fixed
+  scrollablePlotArea: {
+    minWidth: 400
+  },
+  type: 'gantt',
+  height: 1,
+};
+
+export const plotOptionsConfig = {
+  gantt: {
+    dragDrop: {
+      draggableX: true,
+      draggableY: true,
+      dragMinY: 0,
+      dragMaxY: 2,
+    },
+    dataLabels: {
+      enabled: true,
+      align: 'left',
+      format: '{point.name}',
+      style: {
+        fontSize: '14px'
+      },
+    }
+  }
+};
+
+export const rangeSelectorConfig = {
+  enabled: true,
+  allButtonsEnabled: true,
+  buttonSpacing: 10,
+  buttons: [
+    {
+      type: 'week',
+      text: 'Week',
+      title: 'Week',
+      count: 1,
+    },
+    {
+      type: 'month',
+      text: 'Month',
+      title: 'Month',
+      count: 1,
+    },
+    {
+      type: 'month',
+      text: '3M',
+      title: 'Quarter',
+      count: 3,
+    },
+    {
+      type: 'year',
+      text: 'Year',
+      title: 'Year',
+      count: 1,
+    },
+  ]
+};
+
+export const tooltipConfig = {
+  xDateFormat: '%b %d, %H:%M',
+  followPointer: true
+};
+
+export const yAxisConfig = [
+  {
+    labels: {
+      align: 'left',
+      levels: [
+        {
+          level: 1,
+          style: {
+            fontSize: '16px',
+            fontWeight: 'bold',
+            // 'text-decoration': 'underline',
+            // color: '#ff16dc'
+          }
+        },
+        {
+          level: 2,
+          style: {
+            fontSize: '13px',
+            // color: '#ff9916'
+          }
+        }
+      ]
+    }
+  }
+];
+
+export const xAxisConfig = [
+  {
+    // add min and max date to set a min and max date at the initialisation of the chart
+    grid: {
+      cellHeight: 30
+    },
+    labels: {
+      padding: 4,
+      style: {
+        fontSize: '16px'
+      }
+    },
+    currentDateIndicator: {
+      label: {
+        format: '%a %e %b, %H:%M'
+      }
+    },
+    dateTimeLabelFormats: {
+      day: { list: ['%a %e %b', '%e %b', '%e']},
+      week: fr_custom_config.weekFormat,
+      month: { list: ['%B', '%b', '%o'] },
+      year: { list: ['%Y'] }
+    }
+  },
+  {
+    grid: {
+      cellHeight: 30
+    },
+    labels: {
+      padding: 4,
+      style: {
+        fontSize: '16px'
+      }
+    },
+    dateTimeLabelFormats: {
+      day: { list: ['%a %e %b', '%e %b', '%e']},
+      week: fr_custom_config.weekFormat,
+      month: { list: ['%B', '%b', '%o'] },
+      year: { list: ['%Y'] }
+    }
+  }
+] as any; // if we want to avoid the 'any' type, we have to create our own type extending the option of xAxis
+
+export const rangeUnits = [
+  { value: 'hour', label: 'Hour', count: 1 },
+  { value: 'day', label: 'Day', count: 1 },
+  { value: 'week', label: 'Week', count: 1 },
+  { value: 'month', label: 'Month', count: 1 },
+  // { value: 'month', label: 'Quarter', count: 3 },
+  { value: 'year', label: 'Year', count: 1 },
+  // { value: 'ytd', label: 'Year to date', count: 1 } // année en cours
+]

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { PlatformModule } from '@angular/cdk/platform';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './modules/material-import.module';
@@ -43,6 +44,7 @@ import { D3GanttComponent } from './components/d3-gantt/d3-gantt.component';
     BrowserModule,
     AppRoutingModule,
     PlatformModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MaterialModule,
     FlexLayoutModule,

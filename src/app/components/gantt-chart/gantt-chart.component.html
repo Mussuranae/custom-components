@@ -1,3 +1,28 @@
+<section fxFlex fxLayout fxLayoutGap="16px">
+  <article fxLayoutAlign="start center" fxLayoutGap="16px" [formGroup]="rangeForm">
+    <mat-form-field appearance="outline" color="primary">
+      <input matInput [matDatepicker]="from" placeholder="Choose a date" formControlName="from">
+      <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+      <mat-datepicker #from disabled="false"></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <input matInput [matDatepicker]="to" placeholder="Choose a date" formControlName="to">
+      <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+      <mat-datepicker #to disabled="false"></mat-datepicker>
+    </mat-form-field>
+  </article>
+
+  <article fxLaoutAlign="start center" fxLayoutGap="16px">
+    <button mat-button (click)="previous()">Previous</button>
+    <button mat-button (click)="next()">Next</button>
+    <mat-form-field appearance="outline">
+      <mat-select [formControl]="rangeUnitForm">
+        <mat-option *ngFor="let unit of rangeUnits" [value]="unit.value">{{unit.label}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </article>
+</section>
+
 <!--
   Always precise constructorType of the chart if not classic chart (gantt, stock or map)
   Please refer to the doc https://www.npmjs.com/package/highcharts-angular#options-details
@@ -5,5 +30,6 @@
 <highcharts-chart
   [Highcharts]="Highcharts"
   [constructorType]="'ganttChart'"
-  [options]="chartOptions">
+  [options]="chartOptions"
+  [(update)]="updateChartFlag">
 </highcharts-chart>
