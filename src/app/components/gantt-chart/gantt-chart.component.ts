@@ -23,7 +23,6 @@ export class GanttChartComponent implements OnInit, AfterViewInit {
   private jsonData = series;
   rangeUnits = rangeUnits;
   Highcharts: typeof Highcharts = Highcharts;
-  updateChartFlag = false;
   DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
   initialMin = 0;
   initialMax = 0;
@@ -102,14 +101,11 @@ export class GanttChartComponent implements OnInit, AfterViewInit {
 
   updateDateRange() {
     this.rangeForm.valueChanges.subscribe(values => {
-      //? Why is it registered at the root of xAxis also ??? Oo'
-      this.chartOptions.xAxis = [
-        ...xAxisConfig,
-        values.from ? xAxisConfig[0].min = Date.parse(values.from) : 0,
-        values.to ? xAxisConfig[0].max = Date.parse(values.to) : 0
-      ]
-
-      this.updateChartFlag = true;
+      const min = this.Highcharts.charts[0]?.xAxis[0].min!;
+      const max = this.Highcharts.charts[0]?.xAxis[0].max!;
+      const valueFrom = values.from ? Date.parse(values.from) : min;
+      const valueTo = values.to ? Date.parse(values.to) : max;
+      this.Highcharts.charts[0]?.xAxis[0].setExtremes(valueFrom, valueTo)
     })
   }
 
@@ -117,6 +113,9 @@ export class GanttChartComponent implements OnInit, AfterViewInit {
     const unit = this.rangeUnitForm.value;
     const min = this.Highcharts.charts[0]?.xAxis[0].min!;
     const max = this.Highcharts.charts[0]?.xAxis[0].max!;
+
+    console.log('min', min);
+    console.log('max', max);
 
     if (param === 'in') {
       switch(unit) {

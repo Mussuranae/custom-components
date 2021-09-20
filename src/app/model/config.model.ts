@@ -140,7 +140,7 @@ export const xAxisConfig = [
     dateTimeLabelFormats: {
       day: { list: ['%a %e %b', '%e %b', '%e']},
       week: fr_custom_config.weekFormat,
-      month: { list: ['%B', '%b', '%o'] },
+      month: { list: ['%B %Y', '%b %Y', '%B %y', '%b %y'] },
       year: { list: ['%Y'] }
     }
   },
@@ -157,7 +157,7 @@ export const xAxisConfig = [
     dateTimeLabelFormats: {
       day: { list: ['%a %e %b', '%e %b', '%e']},
       week: fr_custom_config.weekFormat,
-      month: { list: ['%B', '%b', '%o'] },
+      month: { list: ['%B %Y', '%b %Y', '%B %y', '%b %y'] },
       year: { list: ['%Y'] }
     }
   }
@@ -168,7 +168,5 @@ export const rangeUnits = [
   { value: 'day', label: 'Day', count: 1 },
   { value: 'week', label: 'Week', count: 1 },
   { value: 'month', label: 'Month', count: 1 },
-  // { value: 'month', label: 'Quarter', count: 3 },
   { value: 'year', label: 'Year', count: 1 },
-  // { value: 'ytd', label: 'Year to date', count: 1 } // année en cours
 ]
