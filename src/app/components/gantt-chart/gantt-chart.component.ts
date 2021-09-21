@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts/highcharts-gantt';
 import DraggablePoints from 'highcharts/modules/draggable-points';
 DraggablePoints(Highcharts);
-import { fr_config, fr_custom_config } from '../../model/config.model';
+import { fr_config, xAxisConfig, yAxisConfig, chartConfig, plotOptionsConfig, tooltipConfig, rangeUnits } from '../../model/config.model';
 import { HighchartDataModel, HighchartSerieModel } from '../../model/interface.model';
 import series from '../../data/data.json';
+import { FormControl, FormGroup } from '@angular/forms';
+
 
 /**
  * Testing Highchart library for Gantt Chart
@@ -16,154 +18,54 @@ import series from '../../data/data.json';
   templateUrl: './gantt-chart.component.html',
   styleUrls: ['./gantt-chart.component.scss']
 })
-export class GanttChartComponent implements OnInit {
+export class GanttChartComponent implements OnInit, AfterViewInit {
 
   private jsonData = series;
+  rangeUnits = rangeUnits;
   Highcharts: typeof Highcharts = Highcharts;
+  DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
+  initialMin = 0;
+  initialMax = 0;
 
   chartOptions: Highcharts.Options = {
-    chart: {
-      //! Allow scrollable chart, title and legend stay fixed
-      scrollablePlotArea: {
-        minWidth: 400
-      },
-      type: 'gantt',
-      height: 1,
-    },
-    plotOptions: {
-      gantt: {
-        dragDrop: {
-          draggableX: true,
-          draggableY: true,
-          dragMinY: 0,
-          dragMaxY: 2,
-        },
-        dataLabels: {
-          enabled: true,
-          align: 'left',
-          format: '{point.name}',
-          style: {
-            fontSize: '14px'
-          },
-        }
-      }
-    },
-    rangeSelector: {
-      enabled: true,
-      allButtonsEnabled: true,
-      buttonSpacing: 10,
-      buttons: [
-        {
-          type: 'week',
-          text: 'Week',
-          title: 'Week',
-          count: 1,
-        },
-        {
-          type: 'month',
-          text: 'Month',
-          title: 'Month',
-          count: 1,
-        },
-        {
-          type: 'month',
-          text: '3M',
-          title: 'Quarter',
-          count: 3,
-        },
-        {
-          type: 'year',
-          text: 'Year',
-          title: 'Year',
-          count: 1,
-        },
-      ]
-    },
+    chart: chartConfig,
+    plotOptions: plotOptionsConfig,
     scrollbar: {
       enabled: true
     },
     title: {
       text: "Gantt Chart"
     },
-    tooltip: {
-      xDateFormat: '%b %d, %H:%M',
-      followPointer: true
-    },
-    xAxis: [
-      {
-        grid: {
-          cellHeight: 30
-        },
-        labels: {
-          padding: 4,
-          style: {
-            fontSize: '16px'
-          }
-        },
-        // add min and max date to set a min and max date at the initialisation of the chart
-        currentDateIndicator: {
-          label: {
-            format: '%a %e %b, %H:%M'
-          }
-        },
-        dateTimeLabelFormats: {
-          day: { list: ['%a %e %b', '%e %b', '%e']},
-          week: fr_custom_config.weekFormat,
-          month: { list: ['%B', '%b', '%o'] },
-          year: { list: ['%Y'] }
-        }
-      },
-      {
-        grid: {
-          cellHeight: 30
-        },
-        labels: {
-          padding: 4,
-          style: {
-            fontSize: '16px'
-          }
-        },
-        dateTimeLabelFormats: {
-          day: { list: ['%a %e %b', '%e %b', '%e']},
-          week: fr_custom_config.weekFormat,
-          month: { list: ['%B', '%b', '%o'] },
-          year: { list: ['%Y'] }
-        }
-      }
-    ] as any, // if we want to avoid the 'any' type, we have to create our own type extending the option of xAxis
-    yAxis: {
-      labels: {
-        align: 'left',
-        levels: [
-          {
-            level: 1,
-            style: {
-              fontSize: '16px',
-              fontWeight: 'bold',
-              // 'text-decoration': 'underline',
-              // color: '#ff16dc'
-            }
-          },
-          {
-            level: 2,
-            style: {
-              fontSize: '13px',
-              // color: '#ff9916'
-            }
-          }
-        ]
-      }
-    },
+    tooltip: tooltipConfig,
+    xAxis: xAxisConfig,
+    yAxis: yAxisConfig as any,
     series: this.formatJsonSerie(this.jsonData.series)
   };
 
+  rangeForm = new FormGroup({
+    from: new FormControl({ value: '', disabled: true }),
+    to: new FormControl({ value: '', disabled: true })
+  })
+  rangeUnitForm = new FormControl('month');
+
   ngOnInit() {
+
     // Set the language for label, button text, etc...
     this.Highcharts.setOptions(fr_config);
     this.updateGanttHeight();
 
-    // Block parent's date with the first and last children's date
-    this.updateParentStartDate();
+    this.updateDateRange();
+  }
+
+  ngAfterViewInit() {
+    this.initialMin = this.Highcharts.charts[0]?.xAxis[0].min!;
+    this.initialMax = this.Highcharts.charts[0]?.xAxis[0].max!;
+  }
+
+  /** Allow us to change the height of rows in chart */
+  updateGanttHeight() {
+    let chartHeight = 80 * this.jsonData.series[0].data.length;
+    this.chartOptions.chart!.height = chartHeight;
   }
 
   formatJsonSerie(source: any): HighchartSerieModel[] {
@@ -176,7 +78,6 @@ export class GanttChartComponent implements OnInit {
         name: s.name,
         data: s.data.map((data: { [key: string]: string | number | any[]; }) => this.formatJsonData(data))
       };
-      console.log('new series', highchartSerie);
       return highchartSerie;
     })
     return series;
@@ -195,26 +96,117 @@ export class GanttChartComponent implements OnInit {
       custom: data.custom ?? null,
       color: data.parent ? '#61b7ff' : '#1bc027'
     }
-    console.log('after format', highchartData)
     return highchartData;
   }
 
-  /** Allow us to change the height of the row in chart */
-  updateGanttHeight() {
-    let chartHeight = 80 * this.jsonData.series[0].data.length;
-    this.chartOptions.chart!.height = chartHeight;
-
+  updateDateRange() {
+    this.rangeForm.valueChanges.subscribe(values => {
+      const min = this.Highcharts.charts[0]?.xAxis[0].min!;
+      const max = this.Highcharts.charts[0]?.xAxis[0].max!;
+      const valueFrom = values.from ? Date.parse(values.from) : min;
+      const valueTo = values.to ? Date.parse(values.to) : max;
+      this.Highcharts.charts[0]?.xAxis[0].setExtremes(valueFrom, valueTo)
+    })
   }
 
-  updateParentStartDate() {
-    // Récupérer chaque date enfant
-    // Comparer et retenir uniquement la plus récente
-    // Retourner la date retenue comme valeur parente
+  zoom(param: 'in' | 'out') {
+    const unit = this.rangeUnitForm.value;
+    const min = this.Highcharts.charts[0]?.xAxis[0].min!;
+    const max = this.Highcharts.charts[0]?.xAxis[0].max!;
+
+    console.log('min', min);
+    console.log('max', max);
+
+    if (param === 'in') {
+      switch(unit) {
+        case "hours":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS/2), max-(this.DAY_IN_MILLISECONDS/2));
+          break;
+        case "day":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS), max-(this.DAY_IN_MILLISECONDS));
+          break;
+        case "week":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*7), max-(this.DAY_IN_MILLISECONDS*7));
+          break;
+        case "month":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*30), max-(this.DAY_IN_MILLISECONDS*30));
+          break;
+        case "year":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*365), max-(this.DAY_IN_MILLISECONDS*365));
+          break;
+      }
+    } else if (param === 'out') {
+      switch(unit) {
+        case "hours":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS/2), max+(this.DAY_IN_MILLISECONDS/2));
+          break;
+        case "day":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS), max+(this.DAY_IN_MILLISECONDS));
+          break;
+        case "week":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*7), max+(this.DAY_IN_MILLISECONDS*7));
+          break;
+        case "month":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*30), max+(this.DAY_IN_MILLISECONDS*30));
+          break;
+        case "year":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*365), max+(this.DAY_IN_MILLISECONDS*365));
+          break;
+      }
+    }
   }
 
-  formatDataLabel(name: string, customColor: string) {
-    return `<span style="color: white; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000">${name}</span>` +
-    `<div class="circle-${customColor}"` +
-    `style="height: 8px; width: 8px; background-color: ${customColor}; border-radius: 50px;"></div>`
+  move(param: 'previous' | 'next') {
+    const unit = this.rangeUnitForm.value;
+    const min = this.Highcharts.charts[0]?.xAxis[0].min!;
+    const max = this.Highcharts.charts[0]?.xAxis[0].max!;
+
+    if(param === 'previous') {
+      switch(unit) {
+        case "hours":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS/2), max-(this.DAY_IN_MILLISECONDS/2));
+          break;
+        case "day":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS), max-(this.DAY_IN_MILLISECONDS));
+          break;
+        case "week":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*7), max-(this.DAY_IN_MILLISECONDS*7));
+          break;
+        case "month":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*30), max-(this.DAY_IN_MILLISECONDS*30));
+          break;
+        case "year":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min-(this.DAY_IN_MILLISECONDS*365), max-(this.DAY_IN_MILLISECONDS*365));
+          break;
+      }
+    } else if (param === 'next') {
+      switch(unit) {
+        case "hours":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS/2), max+(this.DAY_IN_MILLISECONDS/2));
+          break;
+        case "day":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS), max+(this.DAY_IN_MILLISECONDS));
+          break;
+        case "week":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*7), max+(this.DAY_IN_MILLISECONDS*7));
+          break;
+        case "month":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*30), max+(this.DAY_IN_MILLISECONDS*30));
+          break;
+        case "year":
+          this.Highcharts.charts[0]?.xAxis[0].setExtremes(min+(this.DAY_IN_MILLISECONDS*365), max+(this.DAY_IN_MILLISECONDS*365));
+          break;
+      }
+    }
   }
+
+  resetView() {
+    this.Highcharts.charts[0]?.xAxis[0].setExtremes(this.initialMin, this.initialMax)
+  }
+
+  // formatDataLabel(name: string, customColor: string) {
+  //   return `<span style="color: white; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000">${name}</span>` +
+  //   `<div class="circle-${customColor}"` +
+  //   `style="height: 8px; width: 8px; background-color: ${customColor}; border-radius: 50px;"></div>`
+  // }
 }

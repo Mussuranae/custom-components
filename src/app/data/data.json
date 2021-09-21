@@ -54,7 +54,8 @@
           "name": "Run acceptance tests",
           "id": "testAcceptance",
           "start": 1637366400000,
-          "end": 1638144000000
+          "end": 1638144000000,
+          "milestone": true
         }
       ]
     },

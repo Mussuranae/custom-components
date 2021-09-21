@@ -1,8 +1,14 @@
 :host {
-  display: flex
+  display: flex;
+  flex-direction: column;
 }
 
 highcharts-chart {
   width: 100%;
   margin: 0;
+}
+
+section {
+  padding: 8px;
+  background-color: #ececec;
 }
