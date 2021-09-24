@@ -1,0 +1,24 @@
+<app-header (rangeUnit)="rangeUnit($event)" (zoom)="getZoom($event)" (move)="getMove($event)"></app-header>
+
+<ng-container *ngIf="dataToDisplay.length">
+  <table #dataTable>
+    <thead>
+      <tr>
+        <th colspan="3">Tasks list</th>
+      </tr>
+      <tr>
+        <th>Task</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of dataToDisplay">
+        <td height="38">{{ data.name }}</td>
+        <td height="38">{{ data.start }}</td>
+        <td height="38">{{ data.end }}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>
+<svg id="gantt" style="min-height: 100%"></svg>

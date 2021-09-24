@@ -5,17 +5,17 @@
     <a mat-button routerLink="highchart">Highchart</a>
     <a mat-button routerLink="dx">Dev Extreme</a>
     <a mat-button routerLink="d3">D3 Chart</a>
+    <a mat-button routerLink="frappe">Frappe</a>
   </div>
 </mat-toolbar>
 
 <main>
   <h1>Custom Components</h1>
-
   <router-outlet></router-outlet>
 </main>
 
 <ng-container *ngIf="showBanner">
   <informative-banner text="If you are using Internet Explorer or a version of Edge lower than v79,
   you should change for Firefox, Chrome or update Edge. IE is Evil after all..."
-  showBanner)="isHidden($event)"></informative-banner>
+  (showBanner)="isHidden($event)"></informative-banner>
 </ng-container>
