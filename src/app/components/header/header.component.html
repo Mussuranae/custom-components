@@ -1,4 +1,4 @@
-<section fxFlex fxLayout fxLayoutGap="16px">
+<mat-toolbar fxFlex fxLayoutAlign="start center" fxLayoutGap="16px" color="accent">
   <!-- next icon undo and redo -->
   <article fxLayoutAlign="start center" fxLayoutGap="16px" [formGroup]="rangeForm">
     <mat-form-field appearance="outline" color="primary">
@@ -13,26 +13,27 @@
     </mat-form-field>
   </article>
 
+  <!-- Datepicker/Previous/Zoom functionnalities -->
   <article fxLaoutAlign="start center" fxLayoutGap="16px">
-    <button mat-button (click)="move('previous')">
+    <button mat-button (click)="sendMove('previous')">
       <span fxLayout="column" fxLayoutAlign="center center">
         <mat-icon aria-label="arrow_back">arrow_back</mat-icon>
         Previous
       </span>
     </button>
-    <button mat-button (click)="move('next')">
+    <button mat-button (click)="sendMove('next')">
       <span fxLayout="column" fxLayoutAlign="center center">
         <mat-icon aria-label="arrow_forward">arrow_forward</mat-icon>
         Next
       </span>
     </button>
-    <button mat-button (click)="zoom('in')">
+    <button mat-button (click)="sendZoom('in')">
       <span fxLayout="column" fxLayoutAlign="center center">
         <mat-icon aria-label="zoom_in">zoom_in</mat-icon>
         Zoom In
       </span>
     </button>
-    <button mat-button (click)="zoom('out')">
+    <button mat-button (click)="sendZoom('out')">
       <span fxLayout="column" fxLayoutAlign="center center">
         <mat-icon aria-label="zoom_out">zoom_out</mat-icon>
         Zoom Out
@@ -50,15 +51,4 @@
       </mat-select>
     </mat-form-field>
   </article>
-
-</section>
-
-<!--
-  Always precise constructorType of the chart if not classic chart (gantt, stock or map)
-  Please refer to the doc https://www.npmjs.com/package/highcharts-angular#options-details
--->
-<highcharts-chart
-  [Highcharts]="Highcharts"
-  [constructorType]="'ganttChart'"
-  [options]="chartOptions">
-</highcharts-chart>
+</mat-toolbar>

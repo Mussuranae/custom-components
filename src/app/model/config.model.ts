@@ -163,10 +163,12 @@ export const xAxisConfig = [
   }
 ] as any; // if we want to avoid the 'any' type, we have to create our own type extending the option of xAxis
 
-export const rangeUnits = [
-  { value: 'hour', label: 'Hour', count: 1 },
-  { value: 'day', label: 'Day', count: 1 },
-  { value: 'week', label: 'Week', count: 1 },
-  { value: 'month', label: 'Month', count: 1 },
-  { value: 'year', label: 'Year', count: 1 },
-]
+// export const rangeUnits = [
+//   { value: 'hour', label: 'Hour', count: 1 },
+//   { value: 'day', label: 'Day', count: 1 },
+//   { value: 'week', label: 'Week', count: 1 },
+//   { value: 'month', label: 'Month', count: 1 },
+//   { value: 'year', label: 'Year', count: 1 },
+// ]
+
+export const rangeUnits = ['Day', 'Week', 'Month', 'Year'];

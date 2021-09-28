@@ -30,6 +30,8 @@ import { GanttChartComponent } from './components/gantt-chart/gantt-chart.compon
 import { TranslationComponent } from './components/translation/translation.component';
 import { GanttDxComponent } from './components/gantt-dx/gantt-dx.component';
 import { D3GanttComponent } from './components/d3-gantt/d3-gantt.component';
+import { FrappeGanttComponent } from './components/frappe-gantt/frappe-gantt.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { D3GanttComponent } from './components/d3-gantt/d3-gantt.component';
     GanttChartComponent,
     TranslationComponent,
     GanttDxComponent,
-    D3GanttComponent
+    D3GanttComponent,
+    FrappeGanttComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
