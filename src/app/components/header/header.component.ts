@@ -3,6 +3,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { viewMode } from 'frappe-gantt';
 import { rangeUnits } from '../../model/config.model';
 
+interface DateRange {
+  from: Date,
+  to: Date
+}
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -10,9 +15,11 @@ import { rangeUnits } from '../../model/config.model';
 })
 export class HeaderComponent implements OnInit {
 
-  @Output() rangeUnit = new EventEmitter<viewMode>();
-  @Output() zoom = new EventEmitter<string>();
+  @Output() dateRange = new EventEmitter<DateRange>();
   @Output() move = new EventEmitter<string>();
+  @Output() zoom = new EventEmitter<string>();
+  @Output() rangeUnit = new EventEmitter<viewMode>();
+  @Output() reset = new EventEmitter<boolean>();
 
   rangeUnits = rangeUnits;
   rangeForm = new FormGroup({
@@ -27,6 +34,18 @@ export class HeaderComponent implements OnInit {
     this.rangeUnitForm.valueChanges.subscribe(value => {
       this.rangeUnit.emit(value);
     })
+
+    this.sendRangeDate();
+  }
+
+  sendRangeDate() {
+    this.rangeForm.valueChanges.subscribe(values => {
+      const dateRange: DateRange = {
+        from: values.from,
+        to: values.to
+      }
+      this.dateRange.emit(dateRange);
+    })
   }
 
   sendZoom(param: 'in' | 'out') {
@@ -36,6 +55,8 @@ export class HeaderComponent implements OnInit {
     this.move.emit(param);
   }
 
-  resetView() {}
+  resetView() {
+    this.reset.emit(true);
+  }
 
 }

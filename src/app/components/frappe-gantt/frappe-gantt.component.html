@@ -1,4 +1,10 @@
-<app-header (rangeUnit)="rangeUnit($event)" (zoom)="getZoom($event)" (move)="getMove($event)"></app-header>
+<app-header
+(rangeUnit)="rangeUnit($event)"
+(zoom)="getZoom($event)"
+(move)="getMove($event)"
+(dateRange)="getDateRange($event)"
+(reset)="reset($event)"
+></app-header>
 
 <ng-container *ngIf="dataToDisplay.length">
   <table #dataTable>

@@ -1,4 +1,4 @@
-<mat-toolbar fxFlex fxLayoutAlign="start center">
+<mat-toolbar fxFlex fxLayoutAlign="start center" fxLayoutGap="16px" color="accent">
   <!-- next icon undo and redo -->
   <article fxLayoutAlign="start center" fxLayoutGap="16px" [formGroup]="rangeForm">
     <mat-form-field appearance="outline" color="primary">
@@ -13,6 +13,7 @@
     </mat-form-field>
   </article>
 
+  <!-- Datepicker/Previous/Zoom functionnalities -->
   <article fxLaoutAlign="start center" fxLayoutGap="16px">
     <button mat-button (click)="sendMove('previous')">
       <span fxLayout="column" fxLayoutAlign="center center">

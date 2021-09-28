@@ -1,6 +1,10 @@
 // import Gantt from '../../../../node_modules/frappe-gantt/src/index';
 import Gantt from 'frappe-gantt';
 
+/**
+ * ! try https://www.npmjs.com/package/ts-gantt
+ * ? peut-être https://www.npmjs.com/package/gan2chart
+ */
 
 export class GanttExtended extends Gantt {
 
@@ -10,7 +14,8 @@ export class GanttExtended extends Gantt {
   gantt_end: Date | undefined;
   private $svg: SVGElement;
   private bars: any[];
-  _layers: any;
+  layers: any;
+  dates: any[];
 
   DAY = 1000 * 60 * 60 * 24;
   public VIEW_MODE = {
@@ -136,69 +141,222 @@ export class GanttExtended extends Gantt {
     return new Date(...vals);
   }
 
-
-  /** Draw */
-  // private render(): void {
-  //   // clear svg
-  //   this.$svg.innerHTML = '';
-  //   this.bars.splice(0);
-
-  //   // draw svg_layers
-  //   this.setupLayer();
-
-  //   // draw grid svg
-  //   this.drawGrid();
-
-  //   // draw date text and divide bar
-  //   this.drawDateAndDivideBar();
-
-  //   // create bar Object and draw SVG element
-  //   this.drawGanttBars();
+  // render() {
+  //   this.clear();
+  //   this.setup_layers();
+    // this.make_grid();
+    // this.make_dates();
+    // this.make_bars();
+    // this.make_arrows();
+    // this.map_arrows_on_bars();
+    // this.set_width();
+    // this.set_scroll_position();
   // }
 
-  // /** Create SVG layer */
-  // private setupLayer(): void {
-  //   this._layers = {};
+  /** Clear all elements from the parent svg element */
+  // clear() {
+  //   this.$svg.innerHTML = '';
+  // }
+
+  // setup_layers() {
+  //   this.layers = {};
   //   const layers = ['grid', 'date', 'arrow', 'progress', 'bar', 'details'];
+  //   // make group layers
   //   for (let layer of layers) {
-  //     this._layers[layer] = this.createSVG('g', {
-  //                                           class: layer,
-  //                                           appendTo: this.$svg
-  //                                         });
+  //     this.layers[layer] = this.createSVG('g', {
+  //       class: layer,
+  //       append_to: this.$svg
+  //     });
   //   }
   // }
 
-  /** Dra Gantt Bars */
-  // drawGanttBars(): void {
-  //   // create taskBar object from task. and push it
-  //   const createAndPushBar = (self: any, task: any) => {
-  //     if (task.childTask) {
-  //       task.childTask.forEach((t: any) => createAndPushBar(self, t));
-  //     }
-  //     const bar = new Bar(self, task);
-  //     task.taskBar = bar;
-  //     self._layers['bar'].appendChild(bar.$group);
-  //     self.bars.push(bar);
-  //   };
-
-  //   this.tasks.forEach(task => createAndPushBar(this, task));
-  // }
-
   // createSVG(tag: any, attrs: any) {
-  //   const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  //   const elem = document.createElementNS('', tag);
   //   for (let attr in attrs) {
-  //     if (attr === 'appendTo') {
-  //       attrs.appendTo.appendChild(elem);
-
+  //     if (attr === 'append_to') {
+  //       const parent = attrs.append_to;
+  //       parent.appendChild(elem);
   //     } else if (attr === 'innerHTML') {
   //       elem.innerHTML = attrs.innerHTML;
-
   //     } else {
   //       elem.setAttribute(attr, attrs[attr]);
   //     }
   //   }
   //   return elem;
   // }
+
+  // make_dates() {
+  //   for (let date of this.get_dates_to_draw()) {
+  //     this.createSVG('text', {
+  //       x: date.lower_x,
+  //       y: date.lower_y,
+  //       innerHTML: date.lower_text,
+  //       class: 'lower-text',
+  //       append_to: this.layers.date
+  //     });
+
+  //     if (date.upper_text) {
+  //       const $upper_text = this.createSVG('text', {
+  //         x: date.upper_x,
+  //         y: date.upper_y,
+  //         innerHTML: date.upper_text,
+  //         class: 'upper-text',
+  //         append_to: this.layers.date
+  //       });
+
+  //       // remove out-of-bound dates
+  //       // if (
+  //       //   $upper_text.getBBox().x2 > this.layers.grid.getBBox().width
+  //       // ) {
+  //       //   $upper_text.remove();
+  //       // }
+  //     }
+  //   }
+  // }
+
+  // get_dates_to_draw() {
+  //   let last_date: any = null;
+  //   const dates = this.dates.map((date, i) => {
+  //     const d = this.get_date_info(date, last_date, i);
+  //     last_date = date;
+  //     return d;
+  //   });
+  //   return dates;
+  // }
+
+  // get_date_info(date: any, last_date: any, i: any) {
+  //   if (!last_date) {
+  //       last_date = this.add(date, 1, 'year');
+  //   }
+  //   const date_text = {
+  //       'Quarter Day_lower': this.format(
+  //           date,
+  //           'HH',
+  //           this.options.language
+  //       ),
+  //       'Half Day_lower': this.format(
+  //           date,
+  //           'HH',
+  //           this.options.language
+  //       ),
+  //       Day_lower:
+  //           date.getDate() !== last_date.getDate()
+  //               ? this.format(date, 'D', this.options.language)
+  //               : '',
+  //       Week_lower:
+  //           date.getMonth() !== last_date.getMonth()
+  //               ? this.format(date, 'D MMM', this.options.language)
+  //               : this.format(date, 'D', this.options.language),
+  //       Month_lower: this.format(date, 'MMMM', this.options.language),
+  //       Year_lower: this.format(date, 'YYYY', this.options.language),
+  //       'Quarter Day_upper':
+  //           date.getDate() !== last_date.getDate()
+  //               ? this.format(date, 'D MMM', this.options.language)
+  //               : '',
+  //       'Half Day_upper':
+  //           date.getDate() !== last_date.getDate()
+  //               ? date.getMonth() !== last_date.getMonth()
+  //                 ? this.format(date, 'D MMM', this.options.language)
+  //                 : this.format(date, 'D', this.options.language)
+  //               : '',
+  //       Day_upper:
+  //           date.getMonth() !== last_date.getMonth()
+  //               ? this.format(date, 'MMMM', this.options.language)
+  //               : '',
+  //       Week_upper:
+  //           date.getMonth() !== last_date.getMonth()
+  //               ? this.format(date, 'MMMM', this.options.language)
+  //               : '',
+  //       Month_upper:
+  //           date.getFullYear() !== last_date.getFullYear()
+  //               ? this.format(date, 'YYYY', this.options.language)
+  //               : '',
+  //       Year_upper:
+  //           date.getFullYear() !== last_date.getFullYear()
+  //               ? this.format(date, 'YYYY', this.options.language)
+  //               : ''
+  //   };
+
+  //   const base_pos = {
+  //       x: i * this.options.column_width,
+  //       lower_y: this.options.header_height,
+  //       upper_y: this.options.header_height - 25
+  //   };
+
+  //   const x_pos = {
+  //       'Quarter Day_lower': this.options.column_width * 4 / 2,
+  //       'Quarter Day_upper': 0,
+  //       'Half Day_lower': this.options.column_width * 2 / 2,
+  //       'Half Day_upper': 0,
+  //       Day_lower: this.options.column_width / 2,
+  //       Day_upper: this.options.column_width * 30 / 2,
+  //       Week_lower: 0,
+  //       Week_upper: this.options.column_width * 4 / 2,
+  //       Month_lower: this.options.column_width / 2,
+  //       Month_upper: this.options.column_width * 12 / 2,
+  //       Year_lower: this.options.column_width / 2,
+  //       Year_upper: this.options.column_width * 30 / 2
+  //   };
+
+  //   return {
+  //       upper_text: date_text[`${this.options.view_mode}_upper`],
+  //       lower_text: date_text[`${this.options.view_mode}_lower`],
+  //       upper_x: base_pos.x + x_pos[`${this.options.view_mode}_upper`],
+  //       upper_y: base_pos.upper_y,
+  //       lower_x: base_pos.x + x_pos[`${this.options.view_mode}_lower`],
+  //       lower_y: base_pos.lower_y
+  //   };
+  // }
+
+  // format(date: any, format_string = 'YYYY-MM-DD HH:mm:ss.SSS', lang = 'en') {
+  //   const values = this.get_date_values(date).map(d => this.padStart(d, 2, 0));
+  //   const format_map = {
+  //       YYYY: values[0],
+  //       MM: this.padStart(+values[1] + 1, 2, 0),
+  //       DD: values[2],
+  //       HH: values[3],
+  //       mm: values[4],
+  //       ss: values[5],
+  //       SSS:values[6],
+  //       D: values[2],
+  //       MMMM: month_names[lang][+values[1]],
+  //       MMM: month_names[lang][+values[1]]
+  //   };
+
+  //   let str = format_string;
+  //   const formatted_values: any[] = [];
+
+  //   Object.keys(format_map)
+  //       .sort((a, b) => b.length - a.length) // big string first
+  //       .forEach(key => {
+  //           if (str.includes(key)) {
+  //               str = str.replace(key, `$${formatted_values.length}`);
+  //               formatted_values.push(format_map[key]);
+  //           }
+  //       });
+
+  //   formatted_values.forEach((value, i) => {
+  //       str = str.replace(`$${i}`, value);
+  //   });
+
+  //   return str;
+  // }
+
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+//   padStart(str: string, targetLength: number, padString: any) {
+//   str = str + '';
+//   targetLength = targetLength >> 0;
+//   padString = String(typeof padString !== 'undefined' ? padString : ' ');
+//   if (str.length > targetLength) {
+//       return String(str);
+//   } else {
+//       targetLength = targetLength - str.length;
+//       if (targetLength > padString.length) {
+//           padString += padString.repeat(targetLength / padString.length);
+//       }
+//       return padString.slice(0, targetLength) + String(str);
+//   }
+// }
 }
 
 /*

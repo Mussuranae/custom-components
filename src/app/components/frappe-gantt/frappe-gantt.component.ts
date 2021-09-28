@@ -17,6 +17,8 @@ export class FrappeGanttComponent implements OnInit {
   viewMode: viewMode;
   dataToDisplay: any[];
   tasks = tasks;
+  startInit: Date;
+  endInit: Date;
 
   constructor(private renderer: Renderer2) {}
 
@@ -44,11 +46,14 @@ export class FrappeGanttComponent implements OnInit {
         end: task.end
       }
     })
+    this.startInit = this.gantt.gantt_start!;
+    this.endInit = this.gantt.gantt_end!;
 
     this.rangeUnit('Day');
   }
 
   ngAfterViewInit() {
+    /** Use to insert the data table on the left of the Gantt chart, inside the SVG */
     const parent = document.getElementsByClassName('gantt-container');
     const svg = document.getElementById('gantt');
     this.renderer.insertBefore(parent[0], this.dataTable.nativeElement, svg);
@@ -60,42 +65,53 @@ export class FrappeGanttComponent implements OnInit {
     this.gantt.change_view_mode(event);
   }
 
+  /** Change date range with datepicker */
+  getDateRange(event: any) {
+    event.from ? this.gantt.gantt_start = event.from : this.gantt.gantt_start = this.startInit;
+    event.to ? this.gantt.gantt_end = event.to : this.gantt.gantt_end = this.endInit;
+
+    (<any>this.gantt).setup_date_values();
+    (<any>this.gantt).render();
+  }
+
+  /** Zoom in or out in the Gantt chart */
   getZoom(event: string) {
-    console.log('zoom', event);
     const mode = this.gantt.options.view_mode.toUpperCase();
 
     if (event === 'in') {
       this.gantt.gantt_start = this.gantt.add(this.gantt.gantt_start!, 1, mode);
       this.gantt.gantt_end = this.gantt.add(this.gantt.gantt_end!, -1, mode);
-      console.log('in start', this.gantt.gantt_start)
-      console.log('in end', this.gantt.gantt_end)
-
-      // date updated but didn't update the view
     } else {
       this.gantt.gantt_start = this.gantt.add(this.gantt.gantt_start!, -1, mode);
       this.gantt.gantt_end = this.gantt.add(this.gantt.gantt_end!, 1, mode);
-      console.log('out start', this.gantt.gantt_start)
-      console.log('out end', this.gantt.gantt_end)
     }
-
+    (<any>this.gantt).setup_date_values();
+    (<any>this.gantt).render();
   }
 
+  /** Move to previous/next day/week/month */
   getMove(event: string) {
     const mode = this.gantt.options.view_mode.toUpperCase();
 
     if (event === 'previous') {
       this.gantt.gantt_start = this.gantt.add(this.gantt.gantt_start!, -1, mode);
       this.gantt.gantt_end = this.gantt.add(this.gantt.gantt_end!, -1, mode);
-      console.log('previous', this.gantt.gantt_start)
-
-      // date updated but didn't update the view
     } else {
       this.gantt.gantt_start = this.gantt.add(this.gantt.gantt_start!, 1, mode);
       this.gantt.gantt_end = this.gantt.add(this.gantt.gantt_end!, 1, mode);
-      console.log('next', this.gantt.gantt_start)
+    }
+
+    (<any>this.gantt).setup_date_values();
+    (<any>this.gantt).render();
+  }
+
+  /** Reset view with initial start and end gantt date */
+  reset(event: boolean) {
+    if (event) {
+      this.gantt.gantt_start = this.startInit;
+      this.gantt.gantt_end = this.endInit;
+      (<any>this.gantt).setup_date_values();
+      (<any>this.gantt).render();
     }
   }
 }
-
-
-// in source code, look at "setup_gantt_dates()",  "gantt_end", "gantt_start" (l.224 index.js), setup_gantt_dates() (l.1234)

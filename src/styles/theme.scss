@@ -1,0 +1,174 @@
+@use 'sass:map';
+@use '~@angular/material' as mat;
+@import '~@angular/material/theming';
+@include mat.core();
+
+// Look at http://mcg.mbitson.com/#!?mcgpalette0=%233f51b5 to create color palette
+
+$primary: (
+  50: #f5e2f8,
+  100: #e5b8ed,
+  200: #d488e1,
+  300: #c358d4,
+  400: #b635cb,
+  500: #a911c2,
+  600: #a20fbc,
+  700: #980cb4,
+  800: #8f0aac,
+  900: #7e059f,
+  'A100': #f2caff,
+  'A200': #e697ff,
+  'A400': #da64ff,
+  'A700': #d44bff,
+  contrast: (
+    50: #484349,
+    100: #433646,
+    200: #3e2842,
+    300: #391a3e,
+    400: #e9c3ef,
+    500: #e5b8ec,
+    600: #e3b7eb,
+    700: #e0b6e8,
+    800: #ddb6e6,
+    900: #d8b4e2,
+    A100: #473b4b,
+    A200: #442c4b,
+    A400: #401d4b,
+    A700: #3e164b,
+  )
+);
+
+$secondary: (
+  50: #fdf6e7,
+  100: #fbe7c2,
+  200: #f8d899,
+  300: #f5c870,
+  400: #f2bc52,
+  500: #f0b033,
+  600: #eea92e,
+  700: #eca027,
+  800: #e99720,
+  900: #e58714,
+  'A100': #ffffff,
+  'A200': #fff1e1,
+  'A400': #ffd8ae,
+  'A700': #ffcc95,
+  contrast: (
+    50: #4b3c2c,
+    100: #4b3c2c,
+    200: #4b3c2c,
+    300: #4b3c2c,
+    400: #4b3c2c,
+    500: #4b3c2c,
+    600: #4b3c2c,
+    700: #4b3c2c,
+    800: #4b3c2c,
+    900: #4b3c2c,
+    A100: #4b3c2c,
+    A200: #4b3c2c,
+    A400: #4b3c2c,
+    A700: #4b3c2c,
+  )
+);
+
+$warn: (
+  50: #fbe2ea,
+  100: #f4b7ca,
+  200: #ed88a7,
+  300: #e65884,
+  400: #e03469,
+  500: #db104f,
+  600: #d70e48,
+  700: #d20c3f,
+  800: #cd0936,
+  900: #c40526,
+  'A100': #ffedef,
+  'A200': #ffbac3,
+  'A400': #ff8796,
+  'A700': #ff6e7f,
+  contrast: (
+    50: #441a27,
+    100: #441a27,
+    200: #441a27,
+    300: #441a27,
+    400: #f3b7c8,
+    500: #f3b7c8,
+    600: #f3b7c8,
+    700: #f3b7c8,
+    800: #f3b7c8,
+    900: #f3b7c8,
+    A100: #441a27,
+    A200: #441a27,
+    A400: #441a27,
+    A700: #441a27,
+  )
+);
+
+$primary-palette: mat.define-palette($primary, 500);
+$accent-palette: mat.define-palette($secondary);
+$warn-palette: mat.define-palette($warn);
+
+$background-config: (
+  status-bar: map.get($primary-palette, 300),
+  app-bar:    map.get($primary-palette, 100),
+  background: map.get($primary-palette, 50),
+  hover:      rgba(black, 0.04),
+  card:       white,
+  dialog:     white,
+  disabled-button: rgba(black, 0.12),
+  raised-button: white,
+  focused-button: rgba(black, 0.12),
+  selected-button: map.get($primary-palette, 300),
+  selected-disabled-button: map.get($primary-palette, 400),
+  disabled-button-toggle: map.get($primary-palette, 200),
+  unselected-chip: map.get($primary-palette, 300),
+  disabled-list-option: map.get($primary-palette, 200),
+  tooltip: map.get($primary-palette, 700),
+);
+
+$foreground-config: (
+  base:              black,
+  divider:           rgba(black, 0.12),
+  dividers:          rgba(black, 0.12),
+  disabled:          rgba(black, 0.38),
+  disabled-button:   rgba(black, 0.26),
+  disabled-text:     rgba(black, 0.38),
+  elevation:         black,
+  hint-text:         rgba(black, 0.38),
+  secondary-text:    rgba(black, 0.54),
+  icon:              rgba(black, 0.54),
+  icons:             rgba(black, 0.54),
+  text:              rgba(black, 0.87),
+  slider-min:        rgba(black, 0.87),
+  slider-off:        rgba(black, 0.26),
+  slider-off-active: rgba(black, 0.38),
+);
+
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $primary-palette,
+   accent: $accent-palette,
+   warn: $warn-palette,
+   background: $background-config,
+   foreground: $foreground-config
+ )
+));
+
+/**
+* Emit theme-dependent styles for common features used across multiple components.
+* Add for every component we use the theme associated or use the *mat.all-component-themes* to style everything
+* This second solution generate a lot of unused SCSS code if we don't use every AM component
+*/
+@include mat.core-theme($my-theme);
+@include mat.button-theme($my-theme);
+@include mat.datepicker-theme($my-theme);
+@include mat.form-field-theme($my-theme);
+@include mat.icon-theme($my-theme);
+@include mat.input-theme($my-theme);
+@include mat.menu-theme($my-theme);
+@include mat.select-theme($my-theme);
+@include mat.toolbar-theme($my-theme);
+
+// @include mat.all-component-themes($my-theme);
+// @include mat.all-component-colors($my-theme);
+
