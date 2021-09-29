@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
   @Output() zoom = new EventEmitter<string>();
   @Output() rangeUnit = new EventEmitter<viewMode>();
   @Output() reset = new EventEmitter<boolean>();
+  @Output() doableMove = new EventEmitter<string>();
 
   rangeUnits = rangeUnits;
   rangeForm = new FormGroup({
@@ -57,6 +58,10 @@ export class HeaderComponent implements OnInit {
 
   resetView() {
     this.reset.emit(true);
+  }
+
+  undoRedoMove(param: 'undo' | 'redo') {
+    this.doableMove.emit(param);
   }
 
 }

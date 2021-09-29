@@ -4,6 +4,7 @@
 (move)="getMove($event)"
 (dateRange)="getDateRange($event)"
 (reset)="reset($event)"
+(doableMove)="undoRedoMove($event)"
 ></app-header>
 
 <ng-container *ngIf="dataToDisplay.length">
@@ -28,3 +29,4 @@
   </table>
 </ng-container>
 <svg id="gantt" style="min-height: 100%"></svg>
+<svg id="ganttdeux" style="min-height: 100%"></svg>
